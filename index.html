@@ -1,0 +1,1169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PowerPoint Superstar Quiz</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Grade 7 ICT interactive quiz on adding and formatting text and pictures in PowerPoint slides.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: one chunky "sticker" card per screen on a dotted slide-canvas background; progress is a row of numbered slide thumbnails.
+   Single light theme on purpose: the teacher's palette (navy, light blue, cream, yellow, green accents) is the brief. */
+:root{
+  --navy:#16295C;
+  --navy-soft:#2C5BA8;
+  --sky:#8CCBF2;
+  --sky-soft:#E3F2FC;
+  --cream:#FFF8E8;
+  --cream-deep:#F4E6C4;
+  --paper:#FFFDF8;
+  --white:#FFFFFF;
+  --yellow:#FFC83D;
+  --yellow-soft:#FFEDB8;
+  --yellow-deep:#D9A21F;
+  --green:#1B8049;
+  --green-bright:#3DBB72;
+  --green-soft:#DDF3E6;
+  --green-ink:#156B3C;
+  --coral:#CF5236;
+  --coral-soft:#FCE5DD;
+  --coral-ink:#A63A22;
+  --muted:#4E5F87;
+  --disabled-bg:#D9DEE9;
+  --disabled-fg:#56637F;
+  --font-display:"Baloo 2","Trebuchet MS","Segoe UI",system-ui,sans-serif;
+  --font-body:"Nunito","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --radius:22px;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:clamp(16px, 0.55vw + 11px, 22px);-webkit-text-size-adjust:100%}
+body{
+  margin:0;min-height:100%;
+  background-color:var(--cream);
+  background-image:radial-gradient(circle at 1px 1px, rgba(22,41,92,.08) 1.3px, transparent 1.7px);
+  background-size:24px 24px;
+  color:var(--navy);font-family:var(--font-body);font-size:1rem;line-height:1.5;
+  -webkit-tap-highlight-color:transparent;
+}
+[hidden]{display:none!important}
+img,svg{max-width:100%}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:4px solid var(--yellow);outline-offset:3px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+h1,h2,h3{font-family:var(--font-display);line-height:1.12;margin:0;text-wrap:balance}
+p{margin:0}
+svg text{font-family:var(--font-body)}
+svg .svg-display{font-family:var(--font-display)}
+
+/* ---------- top bar ---------- */
+.topbar{background:var(--navy);color:var(--cream);border-bottom:4px solid var(--yellow)}
+.topbar-inner{
+  max-width:1200px;margin:0 auto;padding-block:.6rem;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));
+  display:flex;align-items:center;justify-content:space-between;gap:.6rem 1.25rem;flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:.7rem;min-width:0}
+.brand-mark{width:2.6rem;height:auto;flex:none;display:block}
+.brand-text{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+.eyebrow{font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--sky)}
+.brand-name{font-family:var(--font-display);font-weight:700;font-size:1.15rem}
+.who{display:flex;align-items:center;gap:.5rem;background:rgba(255,248,232,.1);border:1.5px solid rgba(255,248,232,.35);border-radius:999px;padding:.2rem .3rem .2rem .9rem;font-weight:700;max-width:100%;min-width:0}
+.who-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.who-class{background:var(--yellow);color:var(--navy);border-radius:999px;padding:.05rem .65rem;font-weight:800;flex:none}
+
+.wrap{
+  max-width:1200px;margin:0 auto;padding-block:1.4rem 2.5rem;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));
+}
+.screen{animation:rise .35s ease-out}
+@keyframes rise{from{transform:translateY(10px)}to{transform:none}}
+.card{background:var(--paper);border:2.5px solid var(--navy);border-radius:var(--radius);box-shadow:0 6px 0 var(--navy)}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  font-family:var(--font-display);font-weight:700;font-size:1.15rem;line-height:1.1;
+  min-height:3.2rem;padding:.65rem 1.5rem;
+  border:2.5px solid var(--navy);border-radius:999px;box-shadow:0 4px 0 var(--navy);
+  background:var(--white);color:var(--navy);cursor:pointer;
+  transition:transform .08s ease, box-shadow .08s ease;
+  touch-action:manipulation;
+}
+.btn svg{width:1.15em;height:1.15em;flex:none}
+.btn-primary{background:var(--navy);color:var(--cream)}
+.btn-yellow{background:var(--yellow);color:var(--navy)}
+.btn-green{background:var(--green);color:var(--white)}
+.btn:disabled{cursor:not-allowed;background:var(--disabled-bg);color:var(--disabled-fg);border-color:#8E9AB6;box-shadow:0 4px 0 #8E9AB6}
+.btn-big{font-size:1.3rem;min-height:3.6rem;width:100%}
+@media (hover:hover){.btn:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 6px 0 var(--navy)}}
+.btn:not(:disabled):active{transform:translateY(3px);box-shadow:0 1px 0 var(--navy)}
+.link-btn{background:none;border:0;color:var(--navy-soft);font-weight:800;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:.4rem .6rem;min-height:2.75rem}
+
+/* ---------- start screen ---------- */
+/* Phones: intro, then the sign-in form, then the details. Wide screens: form in its own column. */
+.start-card{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"intro" "form" "details";overflow:hidden}
+@media (min-width:900px){.start-card{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-areas:"intro form" "details form";grid-template-rows:auto 1fr}}
+.start-intro{grid-area:intro;padding:1.5rem clamp(1.1rem,3vw,2.2rem) 1.1rem;display:flex;flex-direction:column;gap:1.05rem;min-width:0}
+.start-details{grid-area:details;padding:1.1rem clamp(1.1rem,3vw,2.2rem) 1.6rem;display:flex;flex-direction:column;gap:1.05rem;min-width:0;border-top:2.5px solid var(--navy)}
+@media (min-width:900px){.start-details{border-top:0;padding-top:0}}
+.cast{display:flex;align-items:flex-end;gap:.4rem;flex-wrap:wrap}
+.cast .pixel{width:clamp(5.2rem,13vw,8.5rem);height:auto;display:block}
+.cast .clicky{width:clamp(2.6rem,6.5vw,4.3rem);height:auto;display:block}
+.bubble{position:relative;background:var(--white);border:2.5px solid var(--navy);border-radius:18px;padding:.55rem .9rem;font-weight:800;max-width:18rem;margin:0 0 3.4rem .7rem;box-shadow:0 3px 0 var(--navy)}
+.bubble::after{content:"";position:absolute;left:-11px;bottom:14px;width:18px;height:18px;background:var(--white);border-left:2.5px solid var(--navy);border-bottom:2.5px solid var(--navy);transform:rotate(45deg)}
+@media (max-width:520px){.bubble{margin:0;max-width:none;flex-basis:100%}.bubble::after{display:none}}
+.title-xl{font-size:clamp(2.1rem,4.6vw,3.3rem);font-weight:800}
+.mark{background:linear-gradient(transparent 60%, var(--yellow) 60%, var(--yellow) 92%, transparent 92%);padding-inline:.08em}
+.lede{font-size:1.12rem;color:var(--muted);font-weight:700;max-width:34rem}
+.goals-head{font-weight:800;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.goals{list-style:none;margin:.45rem 0 0;padding:0;display:grid;gap:.6rem}
+.goals li{display:flex;gap:.75rem;align-items:center;font-weight:700;max-width:36rem}
+.goal-icon{flex:none;width:2.4rem;height:2.4rem;border-radius:12px;border:2px solid var(--navy);display:grid;place-items:center;background:var(--sky-soft);font-family:var(--font-display);font-weight:800;font-size:1.05rem}
+.goal-icon svg{width:1.4rem;height:1.4rem;display:block}
+.facts{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem}
+.facts li{background:var(--yellow-soft);border:2px solid var(--navy);border-radius:999px;padding:.15rem .8rem;font-weight:800;font-size:.92rem}
+
+.start-form{grid-area:form;background:var(--sky-soft);border-top:2.5px solid var(--navy);padding:1.5rem clamp(1.1rem,3vw,2.2rem) 1.7rem;display:flex;flex-direction:column;gap:.5rem;min-width:0}
+@media (min-width:900px){.start-form{border-top:0;border-left:2.5px solid var(--navy);justify-content:center}}
+.start-form h2{font-size:1.55rem;font-weight:800;margin-bottom:.3rem}
+.field-label{font-weight:800;margin-top:.45rem}
+.text-input,.select{
+  width:100%;min-height:3.3rem;padding:.65rem 1rem;
+  border:2.5px solid var(--navy);border-radius:14px;background-color:var(--white);
+  font-size:max(1.05rem,16px);font-weight:700;color:var(--navy);
+}
+.text-input::placeholder{color:#7C88A6;font-weight:600}
+.text-input:focus,.select:focus{outline:none;box-shadow:0 0 0 4px var(--yellow)}
+.select{
+  appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:3rem;text-overflow:ellipsis;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4 7l6 6 6-6' fill='none' stroke='%2316295C' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 1rem center;background-size:1.1rem;
+}
+.select:disabled{cursor:default;opacity:1;color:var(--navy);-webkit-text-fill-color:var(--navy)}
+.select.is-right{border-color:var(--green);background-color:var(--green-soft)}
+.select.is-wrong{border-color:var(--coral);background-color:var(--coral-soft)}
+.start-form .btn-big{margin-top:.9rem}
+.hint{font-weight:700;color:var(--muted);font-size:.95rem;min-height:1.5em}
+.hint.ready{color:var(--green-ink)}
+
+.skyline{margin-top:1.4rem}
+.skyline svg{display:block;width:100%;height:auto}
+
+/* ---------- quiz screen ---------- */
+.quiz-card{padding:1.1rem clamp(1rem,2.6vw,1.8rem) 1.5rem}
+.progress-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.6rem 1rem}
+.progress-label{font-family:var(--font-display);font-weight:800;font-size:1.25rem}
+.thumbs{list-style:none;margin:0;padding:0;display:flex;gap:.4rem}
+.thumbs li{width:2.5rem;aspect-ratio:16/9;max-width:100%;border:2px solid var(--navy);border-radius:5px;background:var(--white);display:grid;place-items:center;font-weight:800;font-size:.8rem;line-height:1;color:var(--muted)}
+.thumbs li.current{background:var(--yellow);color:var(--navy)}
+.thumbs li.right{background:var(--green);border-color:var(--green);color:var(--white)}
+.thumbs li.wrong{background:var(--coral-soft);border-color:var(--coral);color:var(--coral-ink)}
+.thumbs li.is-now{box-shadow:0 0 0 3px var(--paper),0 0 0 5.5px var(--navy)}
+.score-chip{display:inline-flex;align-items:center;gap:.4rem;background:var(--yellow-soft);border:2px solid var(--navy);border-radius:999px;padding:.15rem .85rem .15rem .4rem;font-weight:800;font-variant-numeric:tabular-nums}
+.star-slot svg{width:1.35rem;height:1.35rem;display:block}
+.bar{height:.7rem;border-radius:999px;background:var(--sky-soft);border:2px solid var(--navy);margin:.8rem 0 1.1rem;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--green-bright);transition:width .45s ease}
+.q-head{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem}
+.q-tag{align-self:flex-start;display:inline-flex;flex-wrap:wrap;gap:.35rem;background:var(--sky-soft);border:2px solid var(--navy);color:var(--navy);border-radius:999px;padding:.1rem .75rem;font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:.07em}
+.q-text{font-size:clamp(1.4rem,2.5vw,2rem);font-weight:800}
+.q-text:focus{outline:none}
+.q-body{display:grid;gap:1.2rem}
+@media (min-width:880px){.q-body{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:start}}
+/* Two side-by-side slides need the full width to stay readable. */
+.q-body.wide{grid-template-columns:minmax(0,1fr)}
+.q-body.wide .q-visual svg{max-width:58rem;margin-inline:auto}
+@media (min-width:700px){.q-body.wide .options-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:880px){.q-body.wide .q-answer > .btn{align-self:flex-end;min-width:16rem}}
+.swap .q-head,.swap .q-body{animation:rise .3s ease-out}
+.q-visual{margin:0;background:var(--sky-soft);border:2.5px solid var(--navy);border-radius:18px;padding:.7rem;min-width:0}
+.q-visual svg{display:block;width:100%;height:auto}
+.q-visual figcaption{margin-top:.55rem;font-size:.92rem;font-weight:700;color:var(--muted);text-align:center}
+.q-answer{display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.ans-label{font-weight:800;font-size:1.05rem;padding:0;margin:0 0 .5rem}
+.options{border:0;margin:0;padding:0;min-width:0}
+.options-grid{display:grid;gap:.65rem}
+.opt-label{
+  display:flex;align-items:center;gap:.8rem;min-height:3.4rem;padding:.6rem .9rem;
+  border:2.5px solid var(--navy);border-radius:16px;background:var(--white);cursor:pointer;
+  font-weight:700;box-shadow:0 3px 0 var(--navy);transition:transform .08s ease, background-color .15s ease;
+  touch-action:manipulation;
+}
+.letter{flex:none;width:2.2rem;height:2.2rem;border-radius:50%;display:grid;place-items:center;background:var(--sky-soft);border:2px solid var(--navy);font-family:var(--font-display);font-weight:800;font-size:1.05rem}
+.opt-text{flex:1;min-width:0}
+.opt-status{flex:none;font-weight:800;font-size:1.3rem;line-height:1}
+@media (hover:hover){.opt-input:not(:disabled) + .opt-label:hover{transform:translateY(-2px);background:var(--sky-soft)}}
+.opt-input:checked + .opt-label{background:var(--yellow-soft)}
+.opt-input:checked + .opt-label .letter{background:var(--yellow)}
+.opt-input:focus-visible + .opt-label{outline:4px solid var(--yellow);outline-offset:3px}
+.opt-input:disabled + .opt-label{cursor:default}
+/* Result states repeat the ".opt-input +" prefix so they outrank the :checked styles above. */
+.opt-input + .opt-label.is-right{background:var(--green-soft);border-color:var(--green);box-shadow:0 3px 0 var(--green)}
+.opt-input + .opt-label.is-right .letter{background:var(--green);border-color:var(--green);color:var(--white)}
+.opt-input + .opt-label.is-right .opt-status{color:var(--green-ink)}
+.opt-input + .opt-label.is-wrong{background:var(--coral-soft);border-color:var(--coral);box-shadow:0 3px 0 var(--coral)}
+.opt-input + .opt-label.is-wrong .letter{background:var(--coral);border-color:var(--coral);color:var(--white)}
+.opt-input + .opt-label.is-wrong .opt-status{color:var(--coral-ink)}
+.opt-input + .opt-label.is-dim{opacity:.55}
+
+.preview{border:2px dashed var(--navy-soft);border-radius:14px;padding:.55rem .65rem .65rem;background:var(--white)}
+.preview-label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+.preview-slide{margin-top:.35rem;min-height:4.6rem;border-radius:8px;border:1.5px solid #CBD3E4;display:flex;align-items:center;justify-content:center;gap:.3em;flex-wrap:wrap;padding:.5rem .8rem;background:var(--white);text-align:center;overflow:hidden}
+.pv-empty{color:#6F7C9C;font-weight:700;font-size:.95rem}
+.preview-slide.big span{font-family:var(--font-display);font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem);color:var(--navy);line-height:1.1}
+.preview-slide.tiny{background:#FFF1D0}
+.preview-slide.tiny span{font-size:.55rem;color:#EAD7A8;font-weight:600}
+.preview-slide.mixed{background:linear-gradient(90deg,#FFEDB8,#E3F2FC,#FCE5DD)}
+.preview-slide.mixed span:nth-child(1){font-family:Georgia,"Times New Roman",serif;color:#CF5236;font-style:italic;font-size:1.5rem}
+.preview-slide.mixed span:nth-child(2){font-family:"Comic Sans MS","Chalkboard SE",cursive;color:#1B8049;font-size:1.05rem}
+.preview-slide.mixed span:nth-child(3){font-family:"Courier New",Courier,monospace;color:#8A4FD0;font-size:1.75rem;font-weight:700}
+
+.feedback{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.8rem;align-items:center;padding:.8rem 1rem;border-radius:16px;border:2.5px solid var(--navy)}
+.feedback.good{background:var(--green-soft);border-color:var(--green)}
+.feedback.oops{background:var(--yellow-soft);border-color:var(--yellow-deep)}
+.fb-mascot svg{width:4.6rem;height:auto;display:block}
+.feedback.good .fb-mascot{animation:pop .45s ease-out}
+@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.08)}100%{transform:scale(1)}}
+.fb-title{font-family:var(--font-display);font-weight:800;font-size:1.3rem;line-height:1.15}
+.feedback.good .fb-title{color:var(--green-ink)}
+.fb-text{font-weight:700;margin-top:.15rem}
+
+/* ---------- results ---------- */
+.results-card{max-width:800px;margin:0 auto;padding:1.5rem clamp(1.1rem,3vw,2.4rem) 1.6rem;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.results-art{display:flex;align-items:flex-end;justify-content:center;gap:.4rem}
+.results-art .medal{width:clamp(4.5rem,9vw,6rem);height:auto;display:block}
+.results-art .pixel{width:clamp(6rem,12vw,8rem);height:auto;display:block}
+.results-title{font-size:clamp(1.8rem,4.2vw,2.8rem);font-weight:800}
+.results-title:focus{outline:none}
+.results-who{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;align-items:center;font-weight:800;font-size:1.1rem;max-width:100%}
+.who-chip{background:var(--sky-soft);border:2px solid var(--navy);border-radius:999px;padding:.15rem .9rem;max-width:100%;overflow-wrap:anywhere}
+.score-board{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1.2rem 2rem;margin-block:.3rem}
+.ring{--p:0;width:9.5rem;aspect-ratio:1;max-width:100%;border-radius:50%;border:2.5px solid var(--navy);background:conic-gradient(var(--green-bright) calc(var(--p) * 1%), var(--sky-soft) 0);display:grid;place-items:center}
+.ring::before{content:"";grid-area:1/1;width:70%;aspect-ratio:1;border-radius:50%;background:var(--paper);border:2.5px solid var(--navy)}
+.ring span{grid-area:1/1;position:relative;font-family:var(--font-display);font-weight:800;font-size:1.9rem;font-variant-numeric:tabular-nums}
+.score-list{display:grid;gap:.6rem;margin:0}
+.score-list div{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;background:var(--white);border:2px solid var(--navy);border-radius:14px;padding:.4rem 1rem;min-width:13rem}
+.score-list dt{font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}
+.score-list dd{margin:0;font-family:var(--font-display);font-weight:800;font-size:1.8rem;line-height:1.15;font-variant-numeric:tabular-nums}
+.results-msg{font-size:1.12rem;font-weight:700;max-width:36rem;background:var(--yellow-soft);border:2px solid var(--navy);border-radius:16px;padding:.75rem 1.1rem}
+.btn-row{display:flex;flex-wrap:wrap;gap:.8rem;justify-content:center}
+
+/* ---------- review ---------- */
+.review-card{padding:1.4rem clamp(1rem,2.6vw,1.8rem) 1.6rem;display:flex;flex-direction:column;gap:1rem}
+.review-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:.4rem 1rem}
+.review-head h2{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800}
+.review-head h2:focus{outline:none}
+.review-sum{font-weight:800;color:var(--muted);overflow-wrap:anywhere}
+.review-list{list-style:none;margin:0;padding:0;display:grid;gap:1rem}
+.review-item{display:grid;gap:1rem;padding:1rem;background:var(--white);border:2px solid var(--navy);border-radius:18px}
+@media (min-width:760px){.review-item{grid-template-columns:minmax(0,15rem) minmax(0,1fr);align-items:start}}
+.review-thumb{background:var(--sky-soft);border:2px solid var(--navy);border-radius:12px;padding:.4rem;max-width:26rem}
+.review-thumb svg{display:block;width:100%;height:auto}
+.review-thumb *{animation:none!important}
+.review-body{display:flex;flex-direction:column;gap:.55rem;min-width:0}
+.review-top{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;justify-content:space-between}
+.review-num{font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:.78rem;color:var(--muted)}
+.badge{border-radius:999px;padding:.1rem .7rem;font-weight:800;font-size:.85rem;border:2px solid}
+.badge-right{background:var(--green-soft);color:var(--green-ink);border-color:var(--green)}
+.badge-wrong{background:var(--coral-soft);color:var(--coral-ink);border-color:var(--coral)}
+.review-body h3{font-size:1.2rem;font-weight:700}
+.review-answers{margin:0;display:grid;gap:.35rem}
+.review-answers div{display:grid;grid-template-columns:minmax(0,8.5rem) minmax(0,1fr);gap:.6rem}
+@media (max-width:480px){.review-answers div{grid-template-columns:1fr;gap:0}}
+.review-answers dt{font-weight:800;color:var(--muted)}
+.review-answers dd{margin:0;font-weight:800}
+.txt-right{color:var(--green-ink)}
+.txt-wrong{color:var(--coral-ink)}
+.review-tip{background:var(--sky-soft);border-radius:12px;padding:.55rem .8rem;font-weight:600}
+
+/* ---------- motion in the drawings ---------- */
+.arm-wave{transform-box:view-box;transform-origin:129px 88px;animation:wave 1.6s ease-in-out infinite}
+@keyframes wave{0%,100%{transform:rotate(-14deg)}50%{transform:rotate(12deg)}}
+.pulse{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{stroke-opacity:1}50%{stroke-opacity:.3}}
+.fly{transform-box:fill-box;transform-origin:center;animation:fly 5s ease-in-out infinite}
+@keyframes fly{0%,14%{transform:translate(-186px,-117px) scale(.2);opacity:0}20%{opacity:1}48%,90%{transform:none;opacity:1}97%,100%{transform:none;opacity:0}}
+.grow{transform-box:view-box;animation:grow 6s ease-in-out infinite}
+@keyframes grow{0%,22%{transform:scale(1)}62%,94%{transform:scale(.5)}100%{transform:scale(1)}}
+.hmove{animation:hmove 6s ease-in-out infinite}
+@keyframes hmove{0%,22%{transform:translate(0,0)}62%,94%{transform:translate(var(--dx),var(--dy))}100%{transform:translate(0,0)}}
+.b-big{animation:bbig 6s ease-in-out infinite}
+@keyframes bbig{0%,30%{opacity:1}36%,95%{opacity:0}100%{opacity:1}}
+.b-fit{opacity:0;animation:bfit 6s ease-in-out infinite}
+@keyframes bfit{0%,58%{opacity:0}64%,93%{opacity:1}97%,100%{opacity:0}}
+
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+.noscript{max-width:40rem;margin:2rem auto;padding:1rem 1.2rem;background:var(--yellow-soft);border:2px solid var(--navy);border-radius:16px;font-weight:700}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 44 32" aria-hidden="true">
+        <rect x="1.5" y="1.5" width="41" height="27" rx="5" fill="#FFC83D" stroke="#FFF8E8" stroke-width="2"/>
+        <rect x="7" y="7" width="18" height="4" rx="2" fill="#16295C"/>
+        <rect x="7" y="15" width="12" height="3" rx="1.5" fill="#16295C" opacity=".6"/>
+        <rect x="7" y="21" width="15" height="3" rx="1.5" fill="#16295C" opacity=".6"/>
+        <circle cx="33" cy="17" r="5.5" fill="#3DBB72" stroke="#16295C" stroke-width="1.5"/>
+      </svg>
+      <div class="brand-text"><span class="eyebrow">Grade 7 ICT</span><span class="brand-name">PowerPoint Superstar Quiz</span></div>
+    </div>
+    <div class="who" id="who" hidden><span class="who-name" id="whoName"></span><span class="who-class" id="whoClass"></span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <noscript><p class="noscript">This quiz needs JavaScript. Please turn it on in your browser, or ask your teacher for help.</p></noscript>
+
+  <!-- 1. Student information -->
+  <section class="screen" id="screen-start" aria-labelledby="startTitle">
+    <div class="card start-card">
+      <div class="start-intro">
+        <div class="cast">
+          <span id="startPixel"></span>
+          <span id="startClicky"></span>
+          <p class="bubble">Marhaba! We’re Pixel and Clicky. Show us your PowerPoint skills!</p>
+        </div>
+        <h1 class="title-xl" id="startTitle">PowerPoint <span class="mark">Superstar</span> Quiz</h1>
+        <p class="lede">Five quick questions about making slides that stand out with clear text and great pictures.</p>
+      </div>
+      <div class="start-details">
+        <div>
+          <p class="goals-head">Today you will show that you can</p>
+          <ul class="goals">
+            <li><span class="goal-icon" aria-hidden="true">Aa</span><span>Create and organize slides by adding and formatting text effectively.</span></li>
+            <li><span class="goal-icon" aria-hidden="true"><svg viewBox="0 0 30 27"><rect x="1" y="2" width="28" height="23" rx="3" fill="#FFFFFF" stroke="#16295C" stroke-width="2"/><circle cx="21" cy="9" r="3" fill="#FFC83D" stroke="#16295C" stroke-width="1.2"/><path d="M3 23l8-10 6 7 4-4 7 7z" fill="#3DBB72" stroke="#16295C" stroke-width="1.5" stroke-linejoin="round"/></svg></span><span>Insert, resize, reposition, and format relevant pictures to enhance presentations.</span></li>
+          </ul>
+        </div>
+        <ul class="facts" aria-label="Quiz facts">
+          <li>5 questions</li><li>1 point each</li><li>Instant feedback</li>
+        </ul>
+      </div>
+      <form class="start-form" id="startForm" novalidate>
+        <h2>Before you start</h2>
+        <label class="field-label" for="studentName">Student Name</label>
+        <input class="text-input" id="studentName" name="studentName" type="text" maxlength="40" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Type your full name" required>
+        <label class="field-label" for="studentClass">Class</label>
+        <select class="select" id="studentClass" name="studentClass" required>
+          <option value="" selected disabled>Choose your class</option>
+          <option value="7G">7G</option>
+          <option value="7B">7B</option>
+        </select>
+        <button class="btn btn-primary btn-big" id="startBtn" type="submit" disabled>Start the quiz</button>
+        <p class="hint" id="startHint" aria-live="polite">Type your name and choose your class to start.</p>
+      </form>
+    </div>
+    <div class="skyline" id="skylineStart"></div>
+  </section>
+
+  <!-- 2. Quiz questions -->
+  <section class="screen" id="screen-quiz" hidden aria-labelledby="qText">
+    <div class="card quiz-card" id="quizCard">
+      <div class="progress-row">
+        <p class="progress-label" id="progressLabel">Question 1 of 5</p>
+        <ol class="thumbs" id="thumbs" aria-hidden="true"></ol>
+        <p class="score-chip"><span class="star-slot" aria-hidden="true"></span><span id="scoreNow">0 points</span></p>
+      </div>
+      <div class="bar" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0" id="bar"><span id="barFill"></span></div>
+      <div class="q-head">
+        <p class="q-tag"><span id="qType">Dropdown</span><span aria-hidden="true">·</span><span id="qTopic"></span></p>
+        <h2 class="q-text" id="qText" tabindex="-1"></h2>
+      </div>
+      <div class="q-body" id="qBody">
+        <figure class="q-visual" id="qVisual"></figure>
+        <div class="q-answer">
+          <div id="qControl"></div>
+          <button class="btn btn-primary" id="checkBtn" type="button" disabled>Check answer</button>
+          <div id="fbLive" aria-live="polite">
+            <div class="feedback" id="feedback" hidden>
+              <div class="fb-mascot" id="fbMascot" aria-hidden="true"></div>
+              <div><p class="fb-title" id="fbTitle"></p><p class="fb-text" id="fbText"></p></div>
+            </div>
+          </div>
+          <button class="btn btn-green" id="nextBtn" type="button" hidden><span id="nextLabel">Next question</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Results -->
+  <section class="screen" id="screen-results" hidden aria-labelledby="resultsTitle">
+    <div class="card results-card">
+      <div class="results-art"><span id="resMedal"></span><span id="resPixel"></span></div>
+      <h2 class="results-title" id="resultsTitle" tabindex="-1">Great job, <span class="mark">PowerPoint Superstar!</span></h2>
+      <p class="results-who"><span class="who-chip" id="resName"></span><span class="who-chip">Class <span id="resClass"></span></span></p>
+      <div class="score-board">
+        <div class="ring" id="ring" aria-hidden="true"><span id="ringText">0%</span></div>
+        <dl class="score-list">
+          <div><dt>Score</dt><dd><span id="resScore">0</span> / 5</dd></div>
+          <div><dt>Percentage</dt><dd id="resPct">0%</dd></div>
+        </dl>
+      </div>
+      <p class="results-msg" id="resMsg"></p>
+      <div class="btn-row">
+        <button class="btn btn-yellow" id="tryAgainBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v5h5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Try Again</button>
+        <button class="btn btn-primary" id="reviewBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>Review Answers</button>
+      </div>
+      <button class="link-btn" id="newStudentBtn" type="button">Next student? Start again with a new name</button>
+    </div>
+    <div class="skyline" id="skylineEnd"></div>
+  </section>
+
+  <!-- 4. Review answers -->
+  <section class="screen" id="screen-review" hidden aria-labelledby="reviewTitle">
+    <div class="card review-card">
+      <div class="review-head">
+        <h2 id="reviewTitle" tabindex="-1">Review your answers</h2>
+        <p class="review-sum" id="reviewSum"></p>
+      </div>
+      <ol class="review-list" id="reviewList"></ol>
+      <div class="btn-row">
+        <button class="btn" id="backBtn" type="button">Back to results</button>
+        <button class="btn btn-yellow" id="tryAgainBtn2" type="button">Try Again</button>
+      </div>
+    </div>
+  </section>
+</main>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- palette for the drawings (same values as the CSS tokens) ---------- */
+  var N = '#16295C', NB = '#2C5BA8', S = '#8CCBF2', SS = '#E3F2FC', C = '#FFF8E8',
+      Y = '#FFC83D', YS = '#FFEDB8', YD = '#D9A21F', G = '#1B8049', GB = '#3DBB72',
+      W = '#FFFFFF', CO = '#CF5236', SAND = '#F2D488', SKIN = '#E9B58C';
+
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function r1(n) { return Math.round(n * 10) / 10; }
+  function reduceMotion() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+  function starPts(cx, cy, R, r) {
+    var pts = [];
+    for (var k = 0; k < 10; k++) {
+      var a = -Math.PI / 2 + k * Math.PI / 5, d = k % 2 ? r : R;
+      pts.push(r1(cx + d * Math.cos(a)) + ',' + r1(cy + d * Math.sin(a)));
+    }
+    return pts.join(' ');
+  }
+
+  /* ---------- reusable drawing parts ---------- */
+  function chrome(title, h) {
+    h = h || 400;
+    return '<rect width="640" height="' + h + '" rx="14" fill="#EEF5FC"/>' +
+      '<path d="M0 14a14 14 0 0 1 14-14h612a14 14 0 0 1 14 14v20H0z" fill="' + N + '"/>' +
+      '<circle cx="22" cy="17" r="5" fill="' + Y + '"/><circle cx="38" cy="17" r="5" fill="' + S + '"/><circle cx="54" cy="17" r="5" fill="' + GB + '"/>' +
+      '<text x="320" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="' + C + '">' + title + '</text>';
+  }
+  function pill(cx, cy, text) {
+    return '<rect x="' + (cx - 50) + '" y="' + (cy - 12) + '" width="100" height="24" rx="12" fill="' + N + '"/>' +
+      '<text x="' + cx + '" y="' + (cy + 5) + '" text-anchor="middle" font-size="13" font-weight="800" fill="' + C + '">' + text + '</text>';
+  }
+  function skyGrad(id) {
+    return '<linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7EC3EE"/><stop offset="1" stop-color="#FFF1D2"/></linearGradient>';
+  }
+  // Burj Khalifa: stacked set-back tiers, darker on the shaded side.
+  function burj(p, cx, base, h) {
+    var s = h / 180;
+    var T = [[30, 0, 25, -30], [22, -30, 18, -62], [15, -62, 11, -94], [9, -94, 6, -124], [4, -124, 2, -150], [1.2, -150, 0, -180]];
+    var polys = T.map(function (t) {
+      return '<polygon points="' + r1(cx - t[0] * s) + ',' + r1(base + t[1] * s) + ' ' + r1(cx + t[0] * s) + ',' + r1(base + t[1] * s) + ' ' +
+        r1(cx + t[2] * s) + ',' + r1(base + t[3] * s) + ' ' + r1(cx - t[2] * s) + ',' + r1(base + t[3] * s) + '"/>';
+    }).join('');
+    return '<linearGradient id="' + p + 'tw" x1="' + r1(cx - 30 * s) + '" y1="0" x2="' + r1(cx + 30 * s) + '" y2="0" gradientUnits="userSpaceOnUse">' +
+      '<stop offset="0" stop-color="#1E3F7E"/><stop offset=".5" stop-color="' + NB + '"/><stop offset=".5" stop-color="#B9D5F1"/><stop offset="1" stop-color="#86ABD8"/></linearGradient>' +
+      '<g fill="url(#' + p + 'tw)" stroke="' + N + '" stroke-width="1.2" stroke-linejoin="round">' + polys + '</g>';
+  }
+  function dubaiFrame(x, y, s) {
+    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
+      '<rect x="-8" y="84" width="70" height="5" rx="2" fill="#E8C266"/>' +
+      '<rect x="11" y="13" width="32" height="74" fill="#CBE8FA"/>' +
+      '<path d="M0 0H54V87H43V13H11V87H0Z" fill="#F2B632" stroke="' + N + '" stroke-width="1.8" stroke-linejoin="round"/>' +
+      '<path d="M3 4.5H51M3 8.5H51M4 18V82M7.5 18V82M46.5 18V82M50 18V82" stroke="#FFDD80" stroke-width="1.1"/></g>';
+  }
+  function museum(p, x, y, s) {
+    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
+      '<defs>' + skyGrad(p + 'msky') + '<linearGradient id="' + p + 'silver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4F7FB"/><stop offset="1" stop-color="#A9B8CE"/></linearGradient></defs>' +
+      '<rect width="160" height="132" rx="6" fill="url(#' + p + 'msky)"/>' +
+      '<circle cx="132" cy="24" r="11" fill="' + Y + '"/>' +
+      '<path fill-rule="evenodd" d="M30 64a50 44 0 1 0 100 0a50 44 0 1 0-100 0Z M64 62a22 19 0 1 0 44 0a22 19 0 1 0-44 0Z" fill="url(#' + p + 'silver)" stroke="' + N + '" stroke-width="2"/>' +
+      '<g fill="none" stroke="' + N + '" stroke-width="1" opacity=".45" stroke-linecap="round"><path d="M38 50q5-6 10 0t10 0"/><path d="M44 90q6 5 12 0t12 0"/><path d="M112 82q4 6 9 2"/><path d="M72 28q6-4 12 0t12 0"/><path d="M116 46q4-5 8 0"/></g>' +
+      '<path d="M0 132C28 100 132 100 160 132Z" fill="' + GB + '" stroke="' + G + '" stroke-width="1.5"/>' +
+      '<rect width="160" height="132" rx="6" fill="none" stroke="' + N + '" stroke-width="2"/></g>';
+  }
+  function mosque(p, x, y, s) {
+    var arches = '';
+    for (var i = 0; i < 10; i++) {
+      var ax = r1(26 + i * 15.5);
+      arches += '<path d="M' + ax + ' 124V112a5 5 0 0 1 10 0V124Z"/>';
+    }
+    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
+      '<defs>' + skyGrad(p + 'gsky') + '<clipPath id="' + p + 'gclip"><rect width="200" height="160" rx="8"/></clipPath></defs>' +
+      '<g clip-path="url(#' + p + 'gclip)">' +
+      '<rect width="200" height="160" fill="url(#' + p + 'gsky)"/>' +
+      '<g fill="' + W + '" stroke="' + N + '" stroke-width="1.6" stroke-linejoin="round">' +
+      '<rect x="36" y="46" width="6" height="58"/><rect x="158" y="46" width="6" height="58"/>' +
+      '<path d="M35 46L39 37L43 46Z"/><path d="M157 46L161 37L165 46Z"/>' +
+      '<rect x="10" y="30" width="8" height="98"/><rect x="182" y="30" width="8" height="98"/>' +
+      '<path d="M9 30L14 18L19 30Z"/><path d="M181 30L186 18L191 30Z"/>' +
+      '<rect x="18" y="96" width="164" height="32"/>' +
+      '<path d="M30 96C30 82 40 76 46 72C52 76 62 82 62 96Z"/><path d="M138 96C138 82 148 76 154 72C160 76 170 82 170 96Z"/>' +
+      '<path d="M66 96C64 66 88 54 100 44C112 54 136 66 134 96Z"/></g>' +
+      '<g fill="' + SS + '" stroke="#9FC3E6" stroke-width="1">' + arches + '</g>' +
+      '<path d="M100 44V32M46 72V64M154 72V64M14 18V12M186 18V12M39 37V32M161 37V32" stroke="' + YD + '" stroke-width="2.2" stroke-linecap="round"/>' +
+      '<circle cx="100" cy="30" r="2.6" fill="' + YD + '"/>' +
+      '<rect x="0" y="128" width="200" height="32" fill="' + S + '"/>' +
+      '<path d="M30 140h40M90 149h50M150 138h30" stroke="' + W + '" stroke-width="2.5" stroke-linecap="round" opacity=".75"/></g>' +
+      '<rect width="200" height="160" rx="8" fill="none" stroke="' + N + '" stroke-width="2.5"/></g>';
+  }
+  function pizza(x, y) {
+    return '<g transform="translate(' + x + ' ' + y + ')">' +
+      '<path d="M4 6Q38-6 72 8L40 84Z" fill="#FFD36B" stroke="' + N + '" stroke-width="2" stroke-linejoin="round"/>' +
+      '<path d="M4 6Q38-6 72 8L69 15Q38 3 7 13Z" fill="#D9963A" stroke="' + N + '" stroke-width="1.5" stroke-linejoin="round"/>' +
+      '<g fill="' + CO + '" stroke="' + N + '" stroke-width="1"><circle cx="30" cy="25" r="5.5"/><circle cx="52" cy="27" r="5"/><circle cx="40" cy="45" r="5"/><circle cx="40" cy="63" r="3.8"/></g>' +
+      '<path d="M22 35l4 3M55 40l-3 4M33 54l4-2" stroke="' + G + '" stroke-width="2.5" stroke-linecap="round"/></g>';
+  }
+  function person(x, y, kind, mood) {
+    var face = '<circle cx="' + (x - 3.6) + '" cy="' + y + '" r="1.6" fill="' + N + '"/><circle cx="' + (x + 3.6) + '" cy="' + y + '" r="1.6" fill="' + N + '"/>' +
+      (mood === 'happy'
+        ? '<path d="M' + (x - 4) + ' ' + (y + 4) + 'q4 4 8 0" fill="none" stroke="' + N + '" stroke-width="1.6" stroke-linecap="round"/>'
+        : '<path d="M' + (x - 4) + ' ' + (y + 5.5) + 'q2-2.5 4 0t4 0" fill="none" stroke="' + N + '" stroke-width="1.6" stroke-linecap="round"/>');
+    var body = '<path d="M' + (x - 19) + ' ' + (y + 34) + 'Q' + (x - 18) + ' ' + (y + 15) + ' ' + x + ' ' + (y + 14) + 'Q' + (x + 18) + ' ' + (y + 15) + ' ' + (x + 19) + ' ' + (y + 34) + 'Z" fill="' + (kind === 'boy' ? W : '#232A3D') + '" stroke="' + N + '" stroke-width="1.5"/>';
+    if (kind === 'boy') {
+      return body +
+        '<path d="M' + (x - 14) + ' ' + (y + 20) + 'Q' + (x - 15) + ' ' + (y - 15) + ' ' + x + ' ' + (y - 15) + 'Q' + (x + 15) + ' ' + (y - 15) + ' ' + (x + 14) + ' ' + (y + 20) + 'Z" fill="' + W + '" stroke="' + N + '" stroke-width="1.4"/>' +
+        '<circle cx="' + x + '" cy="' + (y + 1) + '" r="9" fill="' + SKIN + '"/>' +
+        '<path d="M' + (x - 10) + ' ' + (y - 2) + 'Q' + x + ' ' + (y - 9) + ' ' + (x + 10) + ' ' + (y - 2) + 'L' + (x + 10) + ' ' + (y - 6) + 'Q' + x + ' ' + (y - 16) + ' ' + (x - 10) + ' ' + (y - 6) + 'Z" fill="' + W + '" stroke="' + N + '" stroke-width="1.2"/>' +
+        '<ellipse cx="' + x + '" cy="' + (y - 11) + '" rx="9.5" ry="2.8" fill="none" stroke="#1A1A1A" stroke-width="2.4"/>' + face;
+    }
+    return body +
+      '<circle cx="' + x + '" cy="' + y + '" r="14" fill="#232A3D"/>' +
+      '<circle cx="' + x + '" cy="' + (y + 1.5) + '" r="9" fill="' + SKIN + '"/>' + face;
+  }
+  function bubbleMark(x, y, good) {
+    return '<circle cx="' + x + '" cy="' + y + '" r="13" fill="' + W + '" stroke="' + N + '" stroke-width="1.8"/>' +
+      (good
+        ? '<path d="M' + (x - 6) + ' ' + y + 'l4 4.5 8-9" fill="none" stroke="' + G + '" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>'
+        : '<text x="' + x + '" y="' + (y + 6) + '" text-anchor="middle" font-size="17" font-weight="800" fill="' + CO + '">?</text>');
+  }
+
+  /* ---------- question pictures ---------- */
+  function v1(p, o) {
+    o = o || {};
+    var t = o.title || '';
+    var facts = ['In Dubai, UAE', '828 meters tall', 'Opened in 2010', 'World’s tallest building'];
+    return '<svg viewBox="0 0 640 400" role="img" aria-label="A PowerPoint slide about Burj Khalifa. It has four facts and a photo of the tower, but the title box is still empty.">' +
+      '<defs>' + skyGrad(p + 'sky') + '<clipPath id="' + p + 'clip"><rect x="345" y="142" width="245" height="222" rx="10"/></clipPath></defs>' +
+      chrome('UAE Landmarks.pptx') +
+      '<rect x="35" y="60" width="580" height="326" rx="4" fill="' + N + '" opacity=".13"/>' +
+      '<rect x="30" y="54" width="580" height="326" rx="4" fill="' + W + '"/>' +
+      '<rect id="' + p + 'tbox" x="50" y="68" width="540" height="58" rx="6" fill="#F5F9FE" stroke="#7D93C4" stroke-width="2" stroke-dasharray="8 6"/>' +
+      '<text id="' + p + 'title" x="320" y="105" text-anchor="middle" class="svg-display" font-size="20" font-weight="700" font-style="italic" fill="#6F7FA6">Click to add title</text>' +
+      '<g font-size="19" font-weight="700" fill="' + N + '">' + facts.map(function (s, i) {
+        return '<circle cx="62" cy="' + (172 + i * 44) + '" r="6" fill="' + Y + '" stroke="' + N + '" stroke-width="1.5"/><text x="78" y="' + (179 + i * 44) + '">' + s + '</text>';
+      }).join('') + '</g>' +
+      '<g clip-path="url(#' + p + 'clip)">' +
+      '<rect x="345" y="142" width="245" height="222" fill="url(#' + p + 'sky)"/>' +
+      '<circle cx="548" cy="186" r="20" fill="' + Y + '"/>' +
+      '<g fill="#B9DDF5" stroke="#8FB9DC" stroke-width="1"><rect x="360" y="296" width="16" height="44"/><rect x="380" y="310" width="14" height="30"/><rect x="398" y="302" width="12" height="38"/><rect x="530" y="292" width="18" height="48"/><rect x="552" y="306" width="14" height="34"/><rect x="570" y="314" width="12" height="26"/></g>' +
+      burj(p, 467, 334, 180) +
+      '<path d="M345 338C390 322 430 330 470 336C515 343 555 326 590 330V364H345Z" fill="' + SAND + '"/>' +
+      '<path d="M345 350C400 340 450 352 500 348C540 345 570 350 590 346V364H345Z" fill="#E8C266"/></g>' +
+      '<rect x="345" y="142" width="245" height="222" rx="10" fill="none" stroke="' + N + '" stroke-width="2"/></svg>';
+  }
+  function setSlideTitle(p, value, status) {
+    var t = document.getElementById(p + 'title'), b = document.getElementById(p + 'tbox');
+    if (!t || !b) return;
+    if (!value) {
+      t.textContent = 'Click to add title';
+      t.setAttribute('font-size', '20'); t.setAttribute('font-weight', '700'); t.setAttribute('font-style', 'italic'); t.setAttribute('fill', '#6F7FA6');
+      b.setAttribute('fill', '#F5F9FE'); b.setAttribute('stroke', '#7D93C4'); b.setAttribute('stroke-width', '2'); b.setAttribute('stroke-dasharray', '8 6');
+      return;
+    }
+    t.textContent = value;
+    t.setAttribute('font-size', value.length > 30 ? '24' : '27'); t.setAttribute('font-weight', '800'); t.setAttribute('font-style', 'normal'); t.setAttribute('fill', N);
+    b.setAttribute('fill', status === 'right' ? '#EEF9F2' : status === 'wrong' ? '#FDF0EB' : W);
+    b.setAttribute('stroke', status === 'right' ? G : status === 'wrong' ? CO : NB);
+    b.setAttribute('stroke-width', status ? '3' : '2');
+    b.setAttribute('stroke-dasharray', 'none');
+  }
+  function v2(p) {
+    return '<svg viewBox="0 0 640 300" role="img" aria-label="Two versions of a slide about the Dubai Frame. In Example 1 the title is tiny and almost the same color as the background. In Example 2 the title is large, bold and dark.">' +
+      pill(165, 20, 'Example 1') + pill(475, 20, 'Example 2') +
+      '<rect x="25" y="46" width="290" height="163" rx="5" fill="' + N + '" opacity=".14"/>' +
+      '<rect x="20" y="40" width="290" height="163" rx="5" fill="#FFF1D0" stroke="' + N + '" stroke-width="2"/>' +
+      '<text x="36" y="62" font-size="8.5" font-weight="600" fill="#EAD7A8">The Dubai Frame</text>' +
+      '<g fill="#F0DFB6"><rect x="36" y="80" width="120" height="5" rx="2.5"/><rect x="36" y="94" width="104" height="5" rx="2.5"/><rect x="36" y="108" width="114" height="5" rx="2.5"/></g>' +
+      dubaiFrame(214, 82, 1.15) +
+      '<rect x="335" y="46" width="290" height="163" rx="5" fill="' + N + '" opacity=".14"/>' +
+      '<rect x="330" y="40" width="290" height="163" rx="5" fill="' + W + '" stroke="' + N + '" stroke-width="2"/>' +
+      '<text x="346" y="84" class="svg-display" font-size="29" font-weight="800" fill="' + N + '">The Dubai Frame</text>' +
+      '<rect x="347" y="94" width="76" height="6" rx="3" fill="' + Y + '"/>' +
+      '<g font-size="13" font-weight="700" fill="' + N + '"><circle cx="352" cy="124" r="4" fill="' + GB + '"/><text x="362" y="129">In Dubai, UAE</text><circle cx="352" cy="148" r="4" fill="' + GB + '"/><text x="362" y="153">150 meters tall</text></g>' +
+      dubaiFrame(528, 96, 1.15) +
+      person(125, 252, 'girl', 'puzzled') + person(165, 252, 'boy', 'puzzled') + person(205, 252, 'girl', 'puzzled') + bubbleMark(240, 232, false) +
+      person(435, 252, 'boy', 'happy') + person(475, 252, 'girl', 'happy') + person(515, 252, 'boy', 'happy') + bubbleMark(550, 232, true) +
+      '</svg>';
+  }
+  function v3(p) {
+    var tabs = [['File', 38], ['Home', 88], ['Insert', 150], ['Design', 214], ['Transitions', 290], ['Animations', 388], ['Slide Show', 486], ['Review', 578]];
+    function icon(cx, label, inner) {
+      return '<g transform="translate(' + (cx - 15) + ' 74)">' + inner + '</g><text x="' + cx + '" y="127" text-anchor="middle" font-size="11.5" font-weight="700" fill="' + N + '">' + label + '</text>';
+    }
+    return '<svg viewBox="0 0 640 400" role="img" aria-label="PowerPoint with the Insert tab open. The Pictures button is highlighted and its menu shows This Device, Stock Images and Online Pictures. A photo of the Museum of the Future moves onto the slide.">' +
+      chrome('Presentation1.pptx') +
+      '<rect x="0" y="34" width="640" height="30" fill="#F3F7FC"/>' +
+      '<rect x="120" y="37" width="60" height="27" rx="6" fill="' + W + '" stroke="' + N + '" stroke-width="1.5"/><rect x="128" y="58" width="44" height="4" rx="2" fill="' + Y + '"/>' +
+      tabs.map(function (t) {
+        return '<text x="' + t[1] + '" y="54" text-anchor="middle" font-size="13.5" font-weight="' + (t[0] === 'Insert' ? 800 : 600) + '" fill="' + N + '">' + t[0] + '</text>';
+      }).join('') +
+      '<rect x="0" y="64" width="640" height="74" fill="' + W + '"/><path d="M0 138H640" stroke="#C9D3E6" stroke-width="1.5"/>' +
+      '<rect class="pulse" x="158" y="68" width="56" height="65" rx="10" fill="' + YS + '" stroke="' + YD + '" stroke-width="3"/>' +
+      icon(50, 'New Slide', '<rect x="6" y="2" width="22" height="16" rx="2" fill="' + W + '" stroke="' + N + '" stroke-width="1.8"/><rect x="2" y="7" width="22" height="16" rx="2" fill="' + SS + '" stroke="' + N + '" stroke-width="1.8"/><path d="M13 11v8M9 15h8" stroke="' + G + '" stroke-width="2.2" stroke-linecap="round"/>') +
+      icon(116, 'Table', '<rect x="2" y="3" width="26" height="22" rx="2" fill="' + W + '" stroke="' + N + '" stroke-width="1.8"/><rect x="2" y="3" width="26" height="7.5" fill="' + S + '" opacity=".7"/><path d="M2 10.5h26M2 17.5h26M10.7 3v22M19.3 3v22" stroke="' + N + '" stroke-width="1.4"/>') +
+      icon(186, 'Pictures', '<rect x="1" y="2" width="28" height="23" rx="3" fill="' + W + '" stroke="' + N + '" stroke-width="1.8"/><circle cx="21" cy="9" r="3" fill="' + Y + '" stroke="' + N + '" stroke-width="1"/><path d="M3 23l8-10 6 7 4-4 7 7z" fill="' + GB + '" stroke="' + N + '" stroke-width="1.4" stroke-linejoin="round"/>') +
+      icon(256, 'Shapes', '<circle cx="10" cy="10" r="7" fill="' + S + '" stroke="' + N + '" stroke-width="1.8"/><rect x="14" y="12" width="13" height="13" rx="1.5" fill="' + Y + '" stroke="' + N + '" stroke-width="1.8"/>') +
+      icon(322, 'Icons', '<path d="M15 25C6 18 2 13 2 8.5A5.5 5.5 0 0 1 15 6a5.5 5.5 0 0 1 13 2.5C28 13 24 18 15 25Z" fill="#F7A9A0" stroke="' + N + '" stroke-width="1.8" stroke-linejoin="round"/>') +
+      icon(390, 'Text Box', '<rect x="2" y="3" width="26" height="22" rx="2" fill="' + W + '" stroke="' + N + '" stroke-width="1.8" stroke-dasharray="3 2"/><text x="15" y="21" text-anchor="middle" font-size="16" font-weight="800" fill="' + N + '">A</text>') +
+      icon(456, 'Chart', '<rect x="3" y="14" width="6" height="11" fill="' + S + '" stroke="' + N + '" stroke-width="1.4"/><rect x="12" y="6" width="6" height="19" fill="' + GB + '" stroke="' + N + '" stroke-width="1.4"/><rect x="21" y="10" width="6" height="15" fill="' + Y + '" stroke="' + N + '" stroke-width="1.4"/>') +
+      '<rect x="0" y="139" width="640" height="261" fill="#EEF5FC"/>' +
+      '<rect x="293" y="173" width="320" height="180" rx="4" fill="' + N + '" opacity=".13"/>' +
+      '<rect x="288" y="168" width="320" height="180" rx="4" fill="' + W + '" stroke="#C9D3E6" stroke-width="1.5"/>' +
+      '<text x="448" y="198" text-anchor="middle" class="svg-display" font-size="19" font-weight="800" fill="' + N + '">Museum of the Future</text>' +
+      '<rect x="372" y="210" width="152" height="126" rx="6" fill="#F5F9FE" stroke="#7D93C4" stroke-width="2" stroke-dasharray="7 5"/>' +
+      '<g class="fly">' + museum(p, 372, 210, 0.95) + '</g>' +
+      '<rect x="167" y="140" width="164" height="90" rx="8" fill="' + N + '" opacity=".15"/>' +
+      '<rect x="164" y="136" width="164" height="90" rx="8" fill="' + W + '" stroke="' + N + '" stroke-width="1.6"/>' +
+      '<rect x="168" y="141" width="156" height="26" rx="5" fill="' + SS + '" stroke="' + S + '" stroke-width="1.2"/>' +
+      '<g fill="none" stroke="' + N + '" stroke-width="1.5"><rect x="175" y="147" width="14" height="10" rx="1.5"/><path d="M179 160h6"/><rect x="175" y="176" width="14" height="11" rx="1.5"/><circle cx="182" cy="209" r="6.5"/><path d="M175.5 209h13M182 202.5c-3 4-3 9 0 13M182 202.5c3 4 3 9 0 13"/></g>' +
+      '<g font-size="13" font-weight="700" fill="' + N + '"><text x="197" y="159">This Device…</text><text x="197" y="187">Stock Images…</text><text x="197" y="214">Online Pictures…</text></g>' +
+      '<path transform="translate(290 152)" d="M0 0L0 17L4.5 13L7.5 20L10.5 18.5L7.5 12L13 12Z" fill="' + W + '" stroke="' + N + '" stroke-width="1.6" stroke-linejoin="round"/>' +
+      '</svg>';
+  }
+  function v4(p) {
+    var H = [[122, 112, 0, 0], [342, 112, -110, 0], [562, 112, -220, 0], [122, 247, 0, -67.5], [562, 247, -220, -67.5], [122, 382, 0, -135], [342, 382, -110, -135], [562, 382, -220, -135]];
+    var handles = H.map(function (h, i) {
+      var corner = i === 7;
+      return '<circle class="hmove" style="--dx:' + h[2] + 'px;--dy:' + h[3] + 'px" cx="' + h[0] + '" cy="' + h[1] + '" r="' + (corner ? 8 : 6) + '" fill="' + (corner ? Y : W) + '" stroke="' + NB + '" stroke-width="2.5"/>';
+    }).join('');
+    var sail = 'M196 204L214 44C290 74 316 158 288 204Z';
+    return '<svg viewBox="0 0 640 410" role="img" aria-label="A picture of Burj Al Arab is much bigger than the slide. The bottom-right corner handle is dragged up and to the left, and the picture gets smaller until it fits, without stretching.">' +
+      chrome('Resize the picture', 410) +
+      '<rect x="105" y="72" width="400" height="225" rx="4" fill="' + N + '" opacity=".13"/>' +
+      '<rect x="100" y="66" width="400" height="225" rx="4" fill="' + W + '" stroke="#C9D3E6" stroke-width="1.5"/>' +
+      '<text x="122" y="99" class="svg-display" font-size="20" font-weight="800" fill="' + N + '">Burj Al Arab</text>' +
+      '<g class="grow" style="transform-origin:122px 112px">' +
+      '<svg x="122" y="112" width="440" height="270" viewBox="0 0 440 270" overflow="hidden">' +
+      '<defs>' + skyGrad(p + 'bsky') + '<clipPath id="' + p + 'sail"><path d="' + sail + '"/></clipPath></defs>' +
+      '<rect width="440" height="270" fill="url(#' + p + 'bsky)"/>' +
+      '<circle cx="362" cy="62" r="28" fill="' + Y + '"/>' +
+      '<rect x="0" y="196" width="440" height="74" fill="#4FA3DB"/>' +
+      '<path d="M20 226h60M140 244h80M260 228h70M350 252h60" stroke="#BFE3F7" stroke-width="4" stroke-linecap="round"/>' +
+      '<path d="M0 214L150 202" stroke="' + SAND + '" stroke-width="6"/>' +
+      '<path d="M150 204Q215 186 300 204Z" fill="' + SAND + '" stroke="' + N + '" stroke-width="2"/>' +
+      '<path d="' + sail + '" fill="' + W + '"/>' +
+      '<g clip-path="url(#' + p + 'sail)" stroke="#D6E5F4" stroke-width="3"><path d="M190 100H320M190 136H320M190 170H320"/><path d="M214 44C262 86 280 150 266 204" fill="none" stroke="#BFD7EF"/></g>' +
+      '<path d="' + sail + '" fill="none" stroke="' + N + '" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M214 44L196 204" stroke="' + N + '" stroke-width="5" stroke-linecap="round"/><path d="M214 44L216 22" stroke="' + N + '" stroke-width="3" stroke-linecap="round"/>' +
+      '<ellipse cx="190" cy="86" rx="15" ry="4" fill="' + N + '"/>' +
+      '</svg>' +
+      '<rect x="122" y="112" width="440" height="270" fill="none" stroke="' + NB + '" stroke-width="2" vector-effect="non-scaling-stroke"/>' +
+      '</g>' + handles +
+      '<g class="hmove" style="--dx:-220px;--dy:-135px"><g transform="translate(571 391)">' +
+      '<path d="M-9-9L9 9M-9-9V-2M-9-9H-2M9 9V2M9 9H2" stroke="' + W + '" stroke-width="7" stroke-linecap="round" fill="none"/>' +
+      '<path d="M-9-9L9 9M-9-9V-2M-9-9H-2M9 9V2M9 9H2" stroke="' + N + '" stroke-width="3" stroke-linecap="round" fill="none"/></g></g>' +
+      '<g class="b-big"><rect x="452" y="40" width="180" height="24" rx="12" fill="' + CO + '"/><text x="542" y="57" text-anchor="middle" font-size="13" font-weight="800" fill="' + W + '">Too big for the slide!</text></g>' +
+      '<g class="b-fit"><rect x="452" y="40" width="180" height="24" rx="12" fill="' + G + '"/><text x="542" y="57" text-anchor="middle" font-size="13" font-weight="800" fill="' + W + '">Just right!</text></g>' +
+      '</svg>';
+  }
+  function v5(p) {
+    var para = [
+      'The Sheikh Zayed Grand Mosque is a very big and',
+      'famous building that many people visit every year',
+      'and it is in Abu Dhabi which is the capital city of',
+      'the UAE and it was built over many years by lots',
+      'of workers from many countries and it has domes',
+      'and columns and a huge carpet and chandeliers and',
+      'a courtyard with flowers made of marble and it is',
+      'very white and it looks beautiful at night when the',
+      'lights change color with the moon and visitors can',
+      'take tours inside and learn about its history and…'
+    ];
+    return '<svg viewBox="0 0 640 230" role="img" aria-label="Two slides about Sheikh Zayed Grand Mosque. Slide 1 is crowded with long paragraphs and shows a pizza. Slide 2 has a clear title, two short facts and a picture of the mosque.">' +
+      pill(162, 16, 'Slide 1') + pill(478, 16, 'Slide 2') +
+      '<rect x="20" y="46" width="295" height="166" rx="5" fill="' + N + '" opacity=".14"/>' +
+      '<rect x="15" y="40" width="295" height="166" rx="5" fill="' + W + '" stroke="' + N + '" stroke-width="2"/>' +
+      '<text x="26" y="56" font-size="9.5" font-weight="700" fill="' + N + '">sheikh zayed grand mosque</text>' +
+      '<g font-size="7.4" fill="#56658A">' + para.map(function (l, i) { return '<text x="26" y="' + (71 + i * 13) + '">' + l + '</text>'; }).join('') + '</g>' +
+      pizza(228, 90) +
+      '<rect x="335" y="46" width="295" height="166" rx="5" fill="' + N + '" opacity=".14"/>' +
+      '<rect x="330" y="40" width="295" height="166" rx="5" fill="' + W + '" stroke="' + N + '" stroke-width="2"/>' +
+      '<text x="344" y="72" class="svg-display" font-size="17" font-weight="800" fill="' + N + '">Sheikh Zayed Grand Mosque</text>' +
+      '<rect x="345" y="80" width="60" height="5" rx="2.5" fill="' + Y + '"/>' +
+      '<g font-size="12" font-weight="700" fill="' + N + '"><circle cx="350" cy="111" r="4" fill="' + GB + '"/><text x="360" y="115.5">In Abu Dhabi, UAE</text><circle cx="350" cy="135" r="4" fill="' + GB + '"/><text x="360" y="139.5">Has 82 white domes</text></g>' +
+      mosque(p, 488, 94, 0.62) +
+      '</svg>';
+  }
+
+  /* ---------- characters ---------- */
+  function pixel(mood) {
+    var eyes = mood === 'happy'
+      ? '<path d="M56 62q8-9 16 0M88 62q8-9 16 0" fill="none" stroke="' + N + '" stroke-width="4.5" stroke-linecap="round"/>'
+      : '<ellipse cx="64" cy="60" rx="7" ry="8.5" fill="' + N + '"/><ellipse cx="96" cy="60" rx="7" ry="8.5" fill="' + N + '"/><circle cx="66.5" cy="57" r="2.4" fill="' + W + '"/><circle cx="98.5" cy="57" r="2.4" fill="' + W + '"/>';
+    var brows = mood === 'oops' ? '<path d="M55 46q8-5 15-1M90 45q8-4 15 1" fill="none" stroke="' + N + '" stroke-width="3" stroke-linecap="round"/>' : '';
+    var mouth = mood === 'oops'
+      ? '<path d="M70 84q10 7 20 0" fill="none" stroke="' + N + '" stroke-width="4" stroke-linecap="round"/>'
+      : '<path d="M64 78q16 20 32 0z" fill="' + N + '" stroke="' + N + '" stroke-width="2" stroke-linejoin="round"/><ellipse cx="80" cy="85" rx="6.5" ry="2.4" fill="#F28B7D"/>';
+    var armStyle = 'fill="none" stroke="' + N + '" stroke-width="5" stroke-linecap="round"';
+    var handStyle = 'fill="' + Y + '" stroke="' + N + '" stroke-width="2.5"';
+    var arms;
+    if (mood === 'happy') {
+      arms = '<path ' + armStyle + ' d="M31 88C20 84 14 72 16 60M129 88C140 84 146 72 144 60"/><circle ' + handStyle + ' cx="16" cy="56" r="7"/><circle ' + handStyle + ' cx="144" cy="56" r="7"/>';
+    } else if (mood === 'wave') {
+      arms = '<path ' + armStyle + ' d="M31 92C20 94 14 102 14 110"/><circle ' + handStyle + ' cx="14" cy="112" r="7"/>' +
+        '<g class="arm-wave"><path ' + armStyle + ' d="M129 88C141 86 147 74 146 62"/><circle ' + handStyle + ' cx="146" cy="57" r="7"/></g>';
+    } else {
+      arms = '<path ' + armStyle + ' d="M31 92C21 94 16 102 16 108M129 92C139 94 144 102 144 108"/><circle ' + handStyle + ' cx="16" cy="111" r="7"/><circle ' + handStyle + ' cx="144" cy="111" r="7"/>';
+    }
+    return '<svg class="pixel" viewBox="0 0 160 146" aria-hidden="true">' +
+      '<ellipse cx="80" cy="141" rx="58" ry="4.5" fill="' + N + '" opacity=".12"/>' + arms +
+      '<rect x="30" y="18" width="100" height="98" rx="16" fill="' + N + '"/>' +
+      '<rect x="38" y="26" width="84" height="80" rx="10" fill="' + SS + '"/>' +
+      '<circle cx="80" cy="22" r="2" fill="' + GB + '"/>' + brows + eyes +
+      '<circle cx="52" cy="78" r="6" fill="#FFB4A2" opacity=".85"/><circle cx="108" cy="78" r="6" fill="#FFB4A2" opacity=".85"/>' + mouth +
+      '<path d="M22 116H138L153 131Q155 136 149 136H11Q5 136 7 131Z" fill="' + NB + '" stroke="' + N + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+      '<g fill="' + N + '" opacity=".35"><rect x="30" y="120.5" width="100" height="3" rx="1.5"/><rect x="26" y="126" width="108" height="3" rx="1.5"/></g>' +
+      '<rect x="66" y="131" width="28" height="2.6" rx="1.3" fill="' + SS + '" opacity=".75"/></svg>';
+  }
+  function clicky() {
+    return '<svg class="clicky" viewBox="0 0 100 132" aria-hidden="true">' +
+      '<ellipse cx="50" cy="127" rx="34" ry="4.5" fill="' + N + '" opacity=".12"/>' +
+      '<path d="M50 20C50 6 66 2 78 8S96 26 92 40" fill="none" stroke="' + GB + '" stroke-width="5" stroke-linecap="round"/>' +
+      '<rect x="17" y="18" width="66" height="102" rx="33" fill="' + Y + '" stroke="' + N + '" stroke-width="3"/>' +
+      '<path d="M50 19V54M18.5 54H81.5" stroke="' + N + '" stroke-width="2.5"/>' +
+      '<rect x="45" y="28" width="10" height="17" rx="5" fill="' + N + '"/>' +
+      '<ellipse cx="38" cy="74" rx="5" ry="6" fill="' + N + '"/><ellipse cx="62" cy="74" rx="5" ry="6" fill="' + N + '"/>' +
+      '<circle cx="39.5" cy="72" r="1.8" fill="' + W + '"/><circle cx="63.5" cy="72" r="1.8" fill="' + W + '"/>' +
+      '<circle cx="29" cy="86" r="5" fill="#FFB4A2" opacity=".9"/><circle cx="71" cy="86" r="5" fill="#FFB4A2" opacity=".9"/>' +
+      '<path d="M41 88q9 9 18 0" fill="none" stroke="' + N + '" stroke-width="3.5" stroke-linecap="round"/></svg>';
+  }
+  function medal() {
+    return '<svg class="medal" viewBox="0 0 120 150" aria-hidden="true">' +
+      '<path d="M34 4H58L72 62H48Z" fill="' + S + '" stroke="' + N + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+      '<path d="M86 4H62L48 62H72Z" fill="' + NB + '" stroke="' + N + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+      '<circle cx="60" cy="100" r="40" fill="' + Y + '" stroke="' + N + '" stroke-width="3"/>' +
+      '<circle cx="60" cy="100" r="30" fill="none" stroke="' + YD + '" stroke-width="3" stroke-dasharray="4 5"/>' +
+      '<polygon points="' + starPts(60, 101, 20, 8.5) + '" fill="' + N + '" stroke="' + N + '" stroke-width="1.5" stroke-linejoin="round"/>' +
+      '<path d="M35 86a30 30 0 0 1 14-15" stroke="' + W + '" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"/></svg>';
+  }
+  function skyline(p) {
+    function palm(x, h) {
+      var tx = x + 3, ty = 126 - h;
+      return '<path d="M' + x + ' 127q-3 ' + (-h / 2) + ' 3 ' + (-h) + '" stroke="#8A6A3D" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+        '<g stroke="' + GB + '" stroke-width="5" fill="none" stroke-linecap="round"><path d="M' + tx + ' ' + ty + 'q-12-8-24 2"/><path d="M' + tx + ' ' + ty + 'q12-8 24 2"/><path d="M' + tx + ' ' + ty + 'q-6-12-16-14"/><path d="M' + tx + ' ' + ty + 'q6-12 16-14"/><path d="M' + tx + ' ' + ty + 'q0-10 2-16"/></g>';
+    }
+    var bg = [[40, 24, 50], [72, 20, 70], [100, 18, 40], [214, 22, 60], [380, 26, 52], [462, 18, 74], [616, 20, 46], [818, 22, 58], [1078, 24, 44], [1132, 26, 66], [1166, 20, 40]];
+    return '<svg viewBox="0 0 1200 140" role="img" aria-label="UAE skyline with Burj Khalifa, the Dubai Frame, Burj Al Arab, the Museum of the Future and Sheikh Zayed Grand Mosque.">' +
+      '<circle cx="1060" cy="50" r="30" fill="' + Y + '"/>' +
+      '<g fill="' + S + '" opacity=".55">' + bg.map(function (b) { return '<rect x="' + b[0] + '" y="' + (128 - b[2]) + '" width="' + b[1] + '" height="' + b[2] + '" rx="2"/>'; }).join('') + '</g>' +
+      burj(p, 170, 128, 124) +
+      dubaiFrame(300, 38, 1) +
+      '<path d="M520 128L538 26C590 48 610 100 594 128Z" fill="' + W + '" stroke="' + N + '" stroke-width="3" stroke-linejoin="round"/><path d="M538 26L520 128M538 26L540 12" stroke="' + N + '" stroke-width="3.5" stroke-linecap="round"/>' +
+      '<path fill-rule="evenodd" d="M696 86a44 38 0 1 0 88 0a44 38 0 1 0-88 0Z M726 84a18 16 0 1 0 36 0a18 16 0 1 0-36 0Z" fill="#D3DDEA" stroke="' + N + '" stroke-width="2.5"/>' +
+      '<path d="M676 128Q740 104 804 128Z" fill="' + GB + '" stroke="' + G + '" stroke-width="2"/>' +
+      '<g fill="' + W + '" stroke="' + N + '" stroke-width="2.2" stroke-linejoin="round">' +
+      '<rect x="884" y="54" width="8" height="74"/><path d="M883 54L888 40L893 54Z"/><rect x="1028" y="54" width="8" height="74"/><path d="M1027 54L1032 40L1037 54Z"/>' +
+      '<rect x="896" y="102" width="128" height="26"/><path d="M904 102C904 90 912 85 918 82C924 85 932 90 932 102Z"/><path d="M988 102C988 90 996 85 1002 82C1008 85 1016 90 1016 102Z"/><path d="M934 102C932 78 950 68 960 60C970 68 988 78 986 102Z"/></g>' +
+      '<path d="M960 60V50M918 82V75M1002 82V75M888 40V34M1032 40V34" stroke="' + YD + '" stroke-width="2.5" stroke-linecap="round"/>' +
+      palm(250, 46) + palm(430, 52) + palm(640, 42) + palm(850, 50) + palm(1112, 46) +
+      '<rect x="0" y="126" width="1200" height="14" fill="' + SAND + '"/></svg>';
+  }
+
+  /* ---------- the five questions ---------- */
+  var QUESTIONS = [
+    {
+      kind: 'dropdown', topic: 'Choosing a Title', visual: v1, liveTitle: true,
+      text: 'Which title is most suitable for this slide?',
+      caption: 'This slide shows facts and a photo of Burj Khalifa. Pick a title to see it on the slide.',
+      options: ['My Favorite Food', 'Burj Khalifa: A Famous UAE Landmark', 'Computer Games'],
+      answer: 'Burj Khalifa: A Famous UAE Landmark',
+      rightTitle: 'Spot on!', right: 'A good title tells the audience what the slide is about, and everything on this slide is about Burj Khalifa.',
+      wrongTitle: 'Nice try!', wrong: 'A title must match the picture and facts. This slide is about Burj Khalifa, so the best title is “Burj Khalifa: A Famous UAE Landmark.”',
+      tip: 'A good title is short and tells the audience exactly what the slide is about.'
+    },
+    {
+      kind: 'dropdown', topic: 'Formatting Text', visual: v2, preview: true,
+      text: 'Which text formatting makes the title easier for the audience to read?',
+      caption: 'The same slide about the Dubai Frame, with two different title styles.',
+      options: ['Tiny text with a similar color to the background', 'Many different fonts and colors', 'Large, bold text with a clear font'],
+      answer: 'Large, bold text with a clear font',
+      rightTitle: 'Brilliant!', right: 'Large, bold text in a clear font can be read even from the back of the classroom.',
+      wrongTitle: 'Good thinking!', wrong: 'Tiny or messy text is hard to read. The best choice is large, bold text with a clear font.',
+      tip: 'Use large, bold text in one clear font, in a color that stands out from the background.'
+    },
+    {
+      kind: 'mcq', topic: 'Inserting Pictures', visual: v3,
+      text: 'Which menu option can you use to add a picture to a slide?',
+      caption: 'Adding a photo of the Museum of the Future to a slide.',
+      options: ['Insert → Pictures', 'Design → Themes', 'Review → Spelling', 'Slide Show → From Beginning'],
+      answer: 0,
+      rightTitle: 'You got it!', right: 'Insert → Pictures lets you add a picture from your device or from online.',
+      wrongTitle: 'Almost!', wrong: 'Pictures are on the Insert tab. The answer is A: Insert → Pictures.',
+      tip: 'Click the Insert tab, then Pictures, then choose where your picture comes from.'
+    },
+    {
+      kind: 'mcq', topic: 'Resizing Pictures', visual: v4,
+      text: 'How can you resize a picture while keeping its proportions?',
+      caption: 'This picture is too big for the slide. Watch how it is made smaller.',
+      options: ['Drag a corner handle of the selected picture.', 'Type the slide title over the picture.', 'Change the background color.', 'Add more text to the slide.'],
+      answer: 0,
+      rightTitle: 'Excellent!', right: 'A corner handle changes the width and height together, so the picture does not stretch or squash.',
+      wrongTitle: 'Not quite!', wrong: 'The answer is A. Select the picture and drag a corner handle to keep its proportions.',
+      tip: 'Select the picture, then drag a corner handle. Side handles stretch or squash it.'
+    },
+    {
+      kind: 'mcq', topic: 'Creating an Effective Slide', visual: v5, wide: true,
+      text: 'Which slide is more effective for the audience?',
+      caption: 'Two slides about Sheikh Zayed Grand Mosque.',
+      options: ['The slide with many long paragraphs.', 'The slide with a clear title, short information, and a relevant picture.', 'The slide with tiny text and bright, clashing colors.', 'The slide with a picture covering all the information.'],
+      answer: 1,
+      rightTitle: 'Superstar answer!', right: 'A clear title, short facts and a matching picture help the audience understand quickly.',
+      wrongTitle: 'Keep going!', wrong: 'The best slide is B: a clear title, short information and a picture that matches the topic.',
+      tip: 'Keep slides simple: a clear title, a few short points and a picture that matches the topic.'
+    }
+  ];
+  var TOTAL = QUESTIONS.length;
+  var LETTERS = 'ABCD';
+
+  /* ---------- state ---------- */
+  var state = { name: '', cls: '', index: 0, answers: emptyAnswers() };
+  var current = 'start';
+  function emptyAnswers() { var a = []; for (var i = 0; i < TOTAL; i++) a.push(null); return a; }
+  function scoreOf() { return state.answers.filter(function (a) { return a && a.correct; }).length; }
+  function firstName() { return state.name.split(' ')[0] || state.name; }
+
+  var el = {
+    who: $('#who'), whoName: $('#whoName'), whoClass: $('#whoClass'),
+    nameInput: $('#studentName'), classSelect: $('#studentClass'), startForm: $('#startForm'), startBtn: $('#startBtn'), startHint: $('#startHint'),
+    quizCard: $('#quizCard'), progressLabel: $('#progressLabel'), thumbs: $('#thumbs'), scoreNow: $('#scoreNow'), bar: $('#bar'), barFill: $('#barFill'),
+    qType: $('#qType'), qTopic: $('#qTopic'), qText: $('#qText'), qBody: $('#qBody'), qVisual: $('#qVisual'), qControl: $('#qControl'),
+    checkBtn: $('#checkBtn'), feedback: $('#feedback'), fbMascot: $('#fbMascot'), fbTitle: $('#fbTitle'), fbText: $('#fbText'), nextBtn: $('#nextBtn'), nextLabel: $('#nextLabel'),
+    resName: $('#resName'), resClass: $('#resClass'), resScore: $('#resScore'), resPct: $('#resPct'), resMsg: $('#resMsg'), ring: $('#ring'), ringText: $('#ringText'), resultsTitle: $('#resultsTitle'),
+    reviewList: $('#reviewList'), reviewSum: $('#reviewSum'), reviewTitle: $('#reviewTitle')
+  };
+
+  function show(name) {
+    current = name;
+    var screens = document.querySelectorAll('.screen');
+    for (var i = 0; i < screens.length; i++) screens[i].hidden = screens[i].id !== 'screen-' + name;
+    el.who.hidden = name === 'start';
+    if (name !== 'start') { el.whoName.textContent = state.name; el.whoClass.textContent = state.cls; }
+    window.scrollTo(0, 0);
+  }
+  function focusNoScroll(node) { try { node.focus({ preventScroll: true }); } catch (e) { node.focus(); } }
+
+  /* ---------- 1. student information gate ---------- */
+  function cleanName() { return el.nameInput.value.replace(/\s+/g, ' ').trim(); }
+  function updateStartGate() {
+    var n = cleanName(), c = el.classSelect.value, ok = n.length >= 2 && !!c;
+    el.startBtn.disabled = !ok;
+    el.startHint.classList.toggle('ready', ok);
+    if (ok) el.startHint.textContent = 'Ready, ' + n.split(' ')[0] + '! Press Start.';
+    else if (n.length < 2 && !c) el.startHint.textContent = 'Type your name and choose your class to start.';
+    else if (n.length < 2) el.startHint.textContent = 'Now type your name.';
+    else el.startHint.textContent = 'Now choose your class: 7G or 7B.';
+  }
+  el.nameInput.addEventListener('input', updateStartGate);
+  el.classSelect.addEventListener('change', updateStartGate);
+  el.startForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    updateStartGate();
+    if (el.startBtn.disabled) { focusNoScroll(cleanName().length < 2 ? el.nameInput : el.classSelect); return; }
+    state.name = cleanName();
+    state.cls = el.classSelect.value;
+    state.answers = emptyAnswers();
+    renderQuestion(0);
+  });
+
+  /* ---------- 2. one question at a time ---------- */
+  function renderThumbs() {
+    el.thumbs.innerHTML = QUESTIONS.map(function (q, k) {
+      var a = state.answers[k];
+      var cls = a ? (a.correct ? 'right' : 'wrong') : (k === state.index ? 'current' : '');
+      if (k === state.index) cls += ' is-now';
+      return '<li class="' + cls + '">' + (a ? (a.correct ? '✓' : '✗') : (k + 1)) + '</li>';
+    }).join('');
+  }
+  function updateProgress() {
+    var done = state.answers.filter(Boolean).length, s = scoreOf();
+    el.scoreNow.textContent = s + (s === 1 ? ' point' : ' points');
+    el.barFill.style.width = (done / TOTAL * 100) + '%';
+    el.bar.setAttribute('aria-valuenow', String(done));
+    renderThumbs();
+  }
+  function dropdownHTML(q) {
+    return '<label class="ans-label" for="ans">Choose the best answer</label>' +
+      '<select class="select" id="ans"><option value="" selected disabled>Choose an answer…</option>' +
+      q.options.map(function (o) { return '<option value="' + esc(o) + '">' + esc(o) + '</option>'; }).join('') + '</select>' +
+      (q.preview ? '<div class="preview" aria-hidden="true" style="margin-top:.9rem"><span class="preview-label">Title preview</span><div class="preview-slide" id="pv"><span class="pv-empty">Pick an option to see the title here</span></div></div>' : '');
+  }
+  function mcqHTML(q) {
+    return '<fieldset class="options"><legend class="ans-label">Choose one answer</legend><div class="options-grid">' +
+      q.options.map(function (o, k) {
+        return '<div class="opt"><input class="sr-only opt-input" type="radio" name="ans" id="ans-' + k + '" value="' + k + '">' +
+          '<label class="opt-label" for="ans-' + k + '"><span class="letter">' + LETTERS[k] + '</span><span class="opt-text">' + esc(o) + '</span><span class="opt-status" aria-hidden="true"></span></label></div>';
+      }).join('') + '</div></fieldset>';
+  }
+  function setPreview(value) {
+    var pv = document.getElementById('pv');
+    if (!pv) return;
+    pv.className = 'preview-slide';
+    if (!value) { pv.innerHTML = '<span class="pv-empty">Pick an option to see the title here</span>'; return; }
+    if (value.indexOf('Tiny') === 0) { pv.classList.add('tiny'); pv.innerHTML = '<span>The Dubai Frame</span>'; }
+    else if (value.indexOf('Many') === 0) { pv.classList.add('mixed'); pv.innerHTML = '<span>The</span><span>Dubai</span><span>Frame</span>'; }
+    else { pv.classList.add('big'); pv.innerHTML = '<span>The Dubai Frame</span>'; }
+  }
+  function currentValue() {
+    var q = QUESTIONS[state.index];
+    if (q.kind === 'dropdown') { var s = document.getElementById('ans'); return s ? s.value : ''; }
+    var r = el.qControl.querySelector('input[name="ans"]:checked');
+    return r ? r.value : '';
+  }
+  function answerText(q, value) {
+    if (q.kind === 'mcq') { var k = Number(value); return LETTERS[k] + '. ' + q.options[k]; }
+    return value;
+  }
+
+  function renderQuestion(i) {
+    state.index = i;
+    var q = QUESTIONS[i];
+    el.progressLabel.textContent = 'Question ' + (i + 1) + ' of ' + TOTAL;
+    el.qType.textContent = q.kind === 'dropdown' ? 'Dropdown' : 'Multiple choice';
+    el.qTopic.textContent = q.topic;
+    el.qText.textContent = q.text;
+    el.qBody.classList.toggle('wide', !!q.wide);
+    el.qVisual.innerHTML = q.visual('qv') + '<figcaption>' + esc(q.caption) + '</figcaption>';
+    el.qControl.innerHTML = q.kind === 'dropdown' ? dropdownHTML(q) : mcqHTML(q);
+    el.feedback.hidden = true;
+    el.nextBtn.hidden = true;
+    el.checkBtn.hidden = false;
+    el.checkBtn.disabled = true;
+    updateProgress();
+    if (state.answers[i]) applyResult(i, false);
+    show('quiz');
+    el.quizCard.classList.remove('swap'); void el.quizCard.offsetWidth; el.quizCard.classList.add('swap');
+    focusNoScroll(el.qText);
+  }
+  el.qControl.addEventListener('change', function () {
+    var i = state.index, q = QUESTIONS[i];
+    if (state.answers[i]) return;
+    var v = currentValue();
+    el.checkBtn.disabled = v === '';
+    if (q.liveTitle) setSlideTitle('qv', v);
+    if (q.preview) setPreview(v);
+  });
+  el.checkBtn.addEventListener('click', function () {
+    var i = state.index, q = QUESTIONS[i];
+    if (state.answers[i]) return;
+    var v = currentValue();
+    if (v === '') return;
+    var correct = q.kind === 'mcq' ? Number(v) === q.answer : v === q.answer;
+    state.answers[i] = { value: v, correct: correct };
+    applyResult(i, true);
+  });
+  function applyResult(i, fresh) {
+    var q = QUESTIONS[i], a = state.answers[i];
+    if (q.kind === 'dropdown') {
+      var sel = document.getElementById('ans');
+      sel.value = a.value;
+      sel.disabled = true;
+      sel.classList.add(a.correct ? 'is-right' : 'is-wrong');
+      if (q.liveTitle) setSlideTitle('qv', a.value, a.correct ? 'right' : 'wrong');
+      if (q.preview) setPreview(a.value);
+    } else {
+      var inputs = el.qControl.querySelectorAll('.opt-input');
+      for (var k = 0; k < inputs.length; k++) {
+        var inp = inputs[k], lab = inp.nextElementSibling, st = lab.querySelector('.opt-status');
+        inp.disabled = true;
+        if (String(k) === a.value) inp.checked = true;
+        if (k === q.answer) { lab.classList.add('is-right'); st.textContent = '✓'; }
+        else if (String(k) === a.value) { lab.classList.add('is-wrong'); st.textContent = '✗'; }
+        else lab.classList.add('is-dim');
+      }
+    }
+    el.feedback.className = 'feedback ' + (a.correct ? 'good' : 'oops');
+    el.fbMascot.innerHTML = pixel(a.correct ? 'happy' : 'oops');
+    el.fbTitle.textContent = a.correct ? q.rightTitle + ' +1 point' : q.wrongTitle;
+    el.fbText.textContent = a.correct ? q.right : q.wrong;
+    el.feedback.hidden = false;
+    el.checkBtn.hidden = true;
+    el.nextLabel.textContent = i === TOTAL - 1 ? 'Finish quiz' : 'Next question';
+    el.nextBtn.hidden = false;
+    updateProgress();
+    if (fresh) {
+      if (a.correct) confetti(45);
+      focusNoScroll(el.nextBtn);
+      try { el.feedback.scrollIntoView({ block: 'nearest', behavior: reduceMotion() ? 'auto' : 'smooth' }); } catch (e) { el.feedback.scrollIntoView(false); }
+    }
+  }
+  el.nextBtn.addEventListener('click', function () {
+    if (!state.answers[state.index]) return;
+    if (state.index < TOTAL - 1) renderQuestion(state.index + 1);
+    else showResults(false);
+  });
+
+  /* ---------- 3. results ---------- */
+  function resultMessage(s) {
+    var n = firstName();
+    if (s === TOTAL) return 'Perfect score, ' + n + '! You know how to make slides that really stand out.';
+    if (s === TOTAL - 1) return 'Excellent work, ' + n + '! You were nearly perfect. Review the one you missed.';
+    if (s === 3) return 'Good job, ' + n + '! Review your answers to become a full PowerPoint superstar.';
+    if (s >= 1) return 'Nice effort, ' + n + '! Review the answers, then try again. You will improve fast.';
+    return 'Every expert starts somewhere, ' + n + '! Review the answers and give it another go.';
+  }
+  var ringRaf = 0, ringTimer = 0;
+  function animateRing(pct) {
+    cancelAnimationFrame(ringRaf);
+    clearTimeout(ringTimer);
+    function finish() { cancelAnimationFrame(ringRaf); el.ring.style.setProperty('--p', pct); el.ringText.textContent = pct + '%'; }
+    if (reduceMotion()) { finish(); return; }
+    var t0 = null, dur = 900;
+    // Some browsers pause animation frames in background tabs; make sure the ring still ends on the real score.
+    ringTimer = setTimeout(finish, dur + 200);
+    function step(t) {
+      if (t0 === null) t0 = t;
+      var k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3), v = pct * e;
+      el.ring.style.setProperty('--p', v.toFixed(1));
+      el.ringText.textContent = Math.round(v) + '%';
+      if (k < 1) ringRaf = requestAnimationFrame(step);
+    }
+    ringRaf = requestAnimationFrame(step);
+  }
+  function showResults(silent) {
+    var s = scoreOf(), pct = Math.round(s / TOTAL * 100);
+    el.resName.textContent = state.name;
+    el.resClass.textContent = state.cls;
+    el.resScore.textContent = String(s);
+    el.resPct.textContent = pct + '%';
+    el.resMsg.textContent = resultMessage(s);
+    show('results');
+    animateRing(pct);
+    focusNoScroll(el.resultsTitle);
+    if (!silent) confetti(s >= 4 ? 170 : s >= 2 ? 100 : 60);
+  }
+
+  /* ---------- 4. review ---------- */
+  function showReview() {
+    var s = scoreOf(), pct = Math.round(s / TOTAL * 100);
+    el.reviewSum.textContent = state.name + ' · Class ' + state.cls + ' · Score ' + s + ' / ' + TOTAL + ' (' + pct + '%)';
+    el.reviewList.innerHTML = QUESTIONS.map(function (q, i) {
+      var a = state.answers[i], ok = !!(a && a.correct);
+      var yours = a ? answerText(q, a.value) : 'No answer';
+      var right = answerText(q, q.kind === 'mcq' ? String(q.answer) : q.answer);
+      return '<li class="review-item"><div class="review-thumb">' + q.visual('r' + i) + '</div><div class="review-body">' +
+        '<div class="review-top"><span class="review-num">Question ' + (i + 1) + ' · ' + esc(q.topic) + '</span>' +
+        '<span class="badge ' + (ok ? 'badge-right' : 'badge-wrong') + '">' + (ok ? '✓ Correct, +1 point' : '✗ Not this time') + '</span></div>' +
+        '<h3>' + esc(q.text) + '</h3>' +
+        '<dl class="review-answers"><div><dt>Your answer</dt><dd class="' + (ok ? 'txt-right' : 'txt-wrong') + '">' + esc(yours) + '</dd></div>' +
+        '<div><dt>Correct answer</dt><dd class="txt-right">' + esc(right) + '</dd></div></dl>' +
+        '<p class="review-tip"><strong>Tip:</strong> ' + esc(q.tip) + '</p></div></li>';
+    }).join('');
+    if (QUESTIONS[0].liveTitle) setSlideTitle('r0', QUESTIONS[0].answer, 'right');
+    show('review');
+    focusNoScroll(el.reviewTitle);
+  }
+
+  /* ---------- buttons ---------- */
+  function tryAgain() { state.answers = emptyAnswers(); renderQuestion(0); }
+  function newStudent() {
+    state.name = ''; state.cls = ''; state.index = 0; state.answers = emptyAnswers();
+    el.nameInput.value = ''; el.classSelect.value = '';
+    updateStartGate();
+    show('start');
+    focusNoScroll(el.nameInput);
+  }
+  $('#tryAgainBtn').addEventListener('click', tryAgain);
+  $('#tryAgainBtn2').addEventListener('click', tryAgain);
+  $('#reviewBtn').addEventListener('click', showReview);
+  $('#backBtn').addEventListener('click', function () { showResults(true); });
+  $('#newStudentBtn').addEventListener('click', newStudent);
+
+  /* ---------- confetti ---------- */
+  var cv = $('#confetti'), cx = cv.getContext && cv.getContext('2d'), parts = [], raf = 0;
+  function confetti(n) {
+    if (!cx || reduceMotion()) return;
+    var w = window.innerWidth, h = window.innerHeight, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = w * dpr; cv.height = h * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var cols = [Y, S, GB, N, CO, NB];
+    for (var k = 0; k < n; k++) {
+      parts.push({ x: w * (0.2 + Math.random() * 0.6), y: h * 0.3 + (Math.random() * 40 - 20), vx: (Math.random() - 0.5) * 10, vy: -Math.random() * 10 - 4,
+        w: 6 + Math.random() * 6, h: 8 + Math.random() * 8, r: Math.random() * 6, vr: (Math.random() - 0.5) * 0.3, c: cols[k % cols.length] });
+    }
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+  function tick() {
+    var w = window.innerWidth, h = window.innerHeight;
+    cx.clearRect(0, 0, w, h);
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      p.vy += 0.25; p.vx *= 0.99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r); cx.fillStyle = p.c;
+      cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r * 2)) + 1);
+      cx.restore();
+    }
+    parts = parts.filter(function (p) { return p.y < h + 40; });
+    if (parts.length) raf = requestAnimationFrame(tick);
+    else { raf = 0; cx.clearRect(0, 0, w, h); }
+  }
+
+  /* ---------- static art ---------- */
+  $('#startPixel').innerHTML = pixel('wave');
+  $('#startClicky').innerHTML = clicky();
+  $('#resMedal').innerHTML = medal();
+  $('#resPixel').innerHTML = pixel('happy');
+  $('#skylineStart').innerHTML = skyline('sk1');
+  $('#skylineEnd').innerHTML = skyline('sk2');
+  var stars = document.querySelectorAll('.star-slot');
+  for (var si = 0; si < stars.length; si++) {
+    stars[si].innerHTML = '<svg viewBox="0 0 24 24"><polygon points="' + starPts(12, 12.6, 10.5, 4.6) + '" fill="' + Y + '" stroke="' + N + '" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+  }
+
+  /* ---------- boot (keeps a student's place if the page is updated while open) ---------- */
+  var hot = window.claude && window.claude.hot;
+  try { if (hot && typeof hot.snapshot === 'function') hot.snapshot(function () { return { state: JSON.parse(JSON.stringify(state)), screen: current }; }); } catch (e) { /* optional */ }
+  function boot(data) {
+    data = data || {};
+    var saved = data.state;
+    if (saved && saved.name && saved.cls && Array.isArray(saved.answers) && saved.answers.length === TOTAL) {
+      state.name = saved.name; state.cls = saved.cls; state.index = Math.min(Math.max(saved.index | 0, 0), TOTAL - 1); state.answers = saved.answers;
+      el.nameInput.value = state.name; el.classSelect.value = state.cls;
+      updateStartGate();
+      if (data.screen === 'quiz') renderQuestion(state.index);
+      else if (data.screen === 'results') showResults(true);
+      else if (data.screen === 'review') showReview();
+      else show('start');
+      return;
+    }
+    updateStartGate();
+    show('start');
+  }
+  if (hot && typeof hot.ready === 'function') hot.ready(boot); else boot(hot && hot.data);
+})();
+</script>
+</body>
+</html>
